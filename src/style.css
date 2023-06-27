@@ -14,6 +14,12 @@
   -webkit-text-size-adjust: 100%;
 }
 
+*
+{
+  margin: 0;
+  padding: 0;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -62,6 +68,13 @@ h1 {
 
 .read-the-docs {
   color: #888;
+}
+
+.webgl{
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
 }
 
 button {

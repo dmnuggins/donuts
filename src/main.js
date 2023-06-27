@@ -1,8 +1,13 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import gsap from 'gsap'
 import * as dat from 'lil-gui'
+
+// Debug
+const gui = new dat.GUI()
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -10,11 +15,54 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+/**
+ * Textures
+ */
+const textureLoader = new THREE.TextureLoader()
+
+/**
+ * Fonts
+ */
+const fontLoader = new FontLoader()
+const font = '/fonts/Caprasimo_Regular.json'
+
+fontLoader.load(
+    font,
+    (font) =>
+    {
+        // Material
+        const material = new THREE.MeshNormalMaterial()
+
+        const textGeometry = new TextGeometry(
+            'DONUTS',
+            {
+                font: font,
+                size: 0.5,
+                height: 0.2,
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 0.03,
+                bevelSize: 0.02,
+                bevelOffset: 0,
+                bevelSegments: 5
+            }
+        )
+        textGeometry.center()
+
+        const text = new THREE.Mesh(textGeometry, material)
+        scene.add(text)
+    },
+    undefined, (error) =>
+    {
+        console.error('Error loading font:', error)
+    }
+)
+
 // Object
-const geometry = new THREE.BoxGeometry(1, 1, 1)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-const mesh = new THREE.Mesh(geometry, material)
-scene.add(mesh)
+// const geometry = new THREE.BoxGeometry(1, 1, 1)
+// const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+// const mesh = new THREE.Mesh(geometry, material)
+// scene.add(mesh)
 
 // Sizes
 const sizes = {
