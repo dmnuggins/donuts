@@ -26,6 +26,8 @@ const textureLoader = new THREE.TextureLoader()
 const fontLoader = new FontLoader()
 const font = '/fonts/Caprasimo_Regular.json'
 
+
+
 fontLoader.load(
     font,
     (font) =>
@@ -50,7 +52,37 @@ fontLoader.load(
         textGeometry.center()
 
         const text = new THREE.Mesh(textGeometry, material)
+        const textBoundingBox = new THREE.Box3().setFromObject(text)
+
         scene.add(text)
+
+        const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 32, 64) // Donut geometry
+        const donutMaterial = new THREE.MeshNormalMaterial() // Material for the donuts
+
+
+        for (let i = 0; i < 150; i++) {
+            const donut = new THREE.Mesh(donutGeometry, donutMaterial)
+
+            let isIntersecting = true;
+            while (isIntersecting) {
+              // Generate random positions
+              const posX = Math.random() * 10 - 5; // Random X position between -5 and 5
+              const posY = Math.random() * 10 - 5; // Random Y position between -5 and 5
+              const posZ = Math.random() * 10 - 5; // Random Z position between -5 and 5
+              donut.rotation.x = Math.random() * Math.PI
+              donut.rotation.y = Math.random() * Math.PI
+              const scale = Math.random()
+              donut.scale.set(scale, scale, scale)
+
+              donut.position.set(posX, posY, posZ); // Set the position of the donut
+
+
+              const donutBoundingBox = new THREE.Box3().setFromObject(donut)
+              isIntersecting = donutBoundingBox.intersectsBox(textBoundingBox)
+            }
+
+            scene.add(donut);
+          }
     },
     undefined, (error) =>
     {
@@ -58,11 +90,6 @@ fontLoader.load(
     }
 )
 
-// Object
-// const geometry = new THREE.BoxGeometry(1, 1, 1)
-// const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-// const mesh = new THREE.Mesh(geometry, material)
-// scene.add(mesh)
 
 // Sizes
 const sizes = {
